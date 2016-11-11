@@ -14,7 +14,7 @@ use Banklink\Protocol\iPizza;
 class DNB extends Banklink
 {
     protected $requestUrl = 'https://ib.dnb.lt/loginB2B.aspx';
-    protected $testRequestUrl = 'https://pangalink.net/banklink/swedbank';
+    protected $testRequestUrl = 'https://www.dnb.lt/B7-DEMO/dnb-ilinija-demo/';
 
     /**
      * Force iPizza protocol

@@ -13,13 +13,13 @@ use Banklink\Protocol\iPizza;
  */
 class Swedbank extends Banklink
 {
-    protected $requestUrl = 'https://www.swedbank.ee/banklink';
+    protected $requestUrl = 'https://ib.swedbank.lt/banklink';
     protected $testRequestUrl = 'https://pangalink.net/banklink/swedbank';
 
     /**
      * Force iPizza protocol
      *
-     * @param \Banklink\iPizza $protocol
+     * @param \Banklink\Protocol\iPizza $protocol
      * @param boolean          $testMode
      * @param string | null    $requestUrl
      */

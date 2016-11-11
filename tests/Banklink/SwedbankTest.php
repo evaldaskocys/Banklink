@@ -55,7 +55,7 @@ class SwedbankTest extends \PHPUnit_Framework_TestCase
         $request = $this->swedbank->preparePaymentRequest(1, 100, 'Test payment', 'ENG', 'EUR');
 
         $this->assertEquals($expectedRequestData, $request->getRequestData());
-        $this->assertEquals('https://www.swedbank.ee/banklink', $request->getRequestUrl());
+        $this->assertEquals('https://ib.swedbank.lt/banklink', $request->getRequestUrl());
     }
 
     public function testHandlePaymentResponseSuccessWithSpecialCharacters()

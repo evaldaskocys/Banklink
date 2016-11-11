@@ -5,7 +5,7 @@ namespace Banklink;
 use Banklink\Protocol\iPizza;
 
 /**
- * Banklink implementation for Sampo bank using iPizza protocol for communication
+ * Banklink implementation for Danske bank using iPizza protocol for communication
  * For specs see https://www.danskebank.ee/public/documents/Pangalink_makse_spetsifikatsioon_eng.pdf
  *               https://www.danskebank.ee/public/documents/Pangalink_autentimise_spetsifikatsioon_eng.pdf
  *
