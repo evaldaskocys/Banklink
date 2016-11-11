@@ -4,6 +4,7 @@ namespace Banklink;
 
 use Banklink\Swedbank;
 use Banklink\Protocol\iPizza;
+use Banklink\Protocol\iPizza\ServicesSwedbank;
 
 use Banklink\Response\PaymentResponse;
 
@@ -18,6 +19,7 @@ class SwedbankTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $protocol = new iPizza(
+            new ServicesSwedbank(),
             'uid258629',
             'Test Testov',
             '119933113300',
@@ -33,7 +35,7 @@ class SwedbankTest extends \PHPUnit_Framework_TestCase
     public function testPreparePaymentRequest()
     {
         $expectedRequestData = array(
-          'VK_SERVICE'  => '1001',
+          'VK_SERVICE'  => '1002',
           'VK_VERSION'  => '008',
           'VK_SND_ID'   => 'uid258629',
           'VK_STAMP'    => '1',
@@ -47,7 +49,7 @@ class SwedbankTest extends \PHPUnit_Framework_TestCase
           'VK_CANCEL'   => 'http://www.google.com',
           'VK_LANG'     => 'ENG',
           'VK_ENCODING' => 'UTF-8',
-          'VK_MAC'      => 'g4SMbCZEbxSXF7qx8ggcRHTyWOx4Dqkb0eM6atoEC5A12SAlWDgIw5TnB319KtreUcEubrjZz9z4NQgVrSieoOX9yr3G7ciLopGaoajAr6RA9RTYP0QDoArTuDKBqFwRT6D+erTggu9Dz3G/dQKlL9SCQtUxV6yCHp0cLgzYmtUGXoC7x4WnP1NuJZwlBnJI3acsCNyw5gTnEHle0Xd2OElH84aKlItqSsPbFirWhZRLfLy8uyiwSseChnTnDXCINyFLypHNTvvn+DaE8m+nyDkL4Jt3L2rciYkLPuoXSY3JGXTzjS7TkpOPUEtBQZ65ZylltduAeknxocvSZYUskA=='
+          'VK_MAC'      => 'PnO6qoTfgkb0iHZ/Qfb3Zs+csx+YIwV6Vv8q0ZoDqDh18Y2DGFXVVMgGggpM5fkPViGQZdSRP8rXA5SyLvIiQ0uALeIELafyEzPKnVuP1qMaJ24pMiH4Tc5zirJOLSolUhKAEKKipoR6MprlaN8JQIuKiUwIFAfBxGusEtZ8u/pwULRH4eOSmefa8xZPA8DapK0QM84jg3klxhNdsLkDctbgi5vNtlV7rj6HwA1XnBTWTd9a0CvU9y/Y9sx0g2XyKdK6nmURgwl7+VBkCu20SsiS3tBv11pI+OKtNNTYsvSGqlvl8z1PEJzWlUYGu4u5kEk0SPAvJPAQvIGbsE9jMw=='
         );
 
         $request = $this->swedbank->preparePaymentRequest(1, 100, 'Test payment', 'ENG', 'EUR');

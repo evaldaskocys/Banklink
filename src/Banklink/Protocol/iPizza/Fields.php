@@ -43,6 +43,9 @@ final class Fields
 
     const SIGNATURE         = 'VK_MAC';
 
+    // Bank code
+    const BANK_CODE         = 'VK_PANK';
+
     /**
      * Can't instantiate this class
      */

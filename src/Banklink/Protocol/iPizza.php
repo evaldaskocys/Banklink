@@ -18,6 +18,8 @@ use Banklink\Protocol\Util\ProtocolUtils;
  */
 class iPizza implements ProtocolInterface
 {
+    protected $services;
+
     protected $publicKey;
     protected $privateKey;
 
@@ -34,6 +36,7 @@ class iPizza implements ProtocolInterface
     /**
      * initialize basic data that will be used for all issued service requests
      *
+     * @param Services $services
      * @param string  $sellerId
      * @param string  $sellerName
      * @param integer $sellerAccNum
@@ -43,8 +46,10 @@ class iPizza implements ProtocolInterface
      * @param string  $version
      * @param boolean $mbStrlen      Use mb_strlen for string length calculation?
      */
-    public function __construct($sellerId, $sellerName, $sellerAccNum, $privateKey, $publicKey, $endpointUrl, $mbStrlen = false, $version = '008')
+    public function __construct(Services $services, $sellerId, $sellerName, $sellerAccNum, $privateKey, $publicKey, $endpointUrl, $mbStrlen = false, $version = '008')
     {
+        $this->services            = $services;
+
         $this->sellerId            = $sellerId;
         $this->sellerName          = $sellerName;
         $this->sellerAccountNumber = $sellerAccNum;
@@ -71,7 +76,7 @@ class iPizza implements ProtocolInterface
     public function preparePaymentRequestData($orderId, $sum, $message, $outputEncoding, $language = 'EST', $currency = 'EUR')
     {
         $requestData = array(
-            Fields::SERVICE_ID       => Services::PAYMENT_REQUEST,
+            Fields::SERVICE_ID       => $this->services->paymentRequest,
             Fields::PROTOCOL_VERSION => $this->protocolVersion,
             Fields::SELLER_ID        => $this->sellerId,
             Fields::ORDER_ID         => $orderId,
@@ -110,7 +115,7 @@ class iPizza implements ProtocolInterface
         $responseData = ProtocolUtils::convertValues($responseData, $inputEncoding, 'UTF-8');
 
         $service = $responseData[Fields::SERVICE_ID];
-        if (in_array($service, Services::getPaymentServices())) {
+        if (in_array($service, $this->services->getPaymentServices())) {
             return $this->handlePaymentResponse($responseData, $verificationSuccess);
         }
 
@@ -129,7 +134,7 @@ class iPizza implements ProtocolInterface
     {
         // if response was verified, try to guess status by service id
         if ($verificationSuccess) {
-            $status = $responseData[Fields::SERVICE_ID] == Services::PAYMENT_SUCCESS ? PaymentResponse::STATUS_SUCCESS : PaymentResponse::STATUS_CANCEL;
+            $status = $responseData[Fields::SERVICE_ID] == $this->services->paymentSuccess ? PaymentResponse::STATUS_SUCCESS : PaymentResponse::STATUS_CANCEL;
         } else {
             $status = PaymentResponse::STATUS_ERROR;
         }
@@ -204,7 +209,7 @@ class iPizza implements ProtocolInterface
         $id = $data[Fields::SERVICE_ID];
 
         $hash = '';
-        foreach (Services::getFieldsForService($id) as $fieldName) {
+        foreach ($this->services->getFieldsForService($id) as $fieldName) {
             if (!isset($data[$fieldName])) {
                 throw new \LogicException(sprintf('Cannot generate %s service hash without %s field', $id, $fieldName));
             }

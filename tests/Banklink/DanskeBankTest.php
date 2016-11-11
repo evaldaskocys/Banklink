@@ -4,6 +4,7 @@ namespace Banklink;
 
 use Banklink\DanskeBank;
 use Banklink\Protocol\iPizza;
+use Banklink\Protocol\iPizza\ServicesWithPANK;
 
 use Banklink\Response\PaymentResponse;
 
@@ -13,11 +14,12 @@ use Banklink\Response\PaymentResponse;
  */
 class DanskeBankTest extends \PHPUnit_Framework_TestCase
 {
-    private $swedbank;
+    private $danske;
 
     public function setUp()
     {
         $protocol = new iPizza(
+            new ServicesWithPANK(),
             'uid258629',
             'Test Testov',
             '119933113300',
@@ -27,7 +29,7 @@ class DanskeBankTest extends \PHPUnit_Framework_TestCase
             true
         );
 
-        $this->swedbank = new DanskeBank($protocol);
+        $this->danske = new DanskeBank($protocol);
     }
 
     public function testHandlePaymentResponseSuccessWithSpecialCharacters()
@@ -53,7 +55,7 @@ class DanskeBankTest extends \PHPUnit_Framework_TestCase
             'VK_MAC'      => 'eK4mEiRhpZ/gz1/4GEaNwvX+AhfpaTJOQRGdWky4Cb6Gqubn3pgSDeApdcccu+WMrAX1ozzx3H/kEzIHn2NT3mFDUHNkEnOlx7OFgNZY+Wvypz18GCYyW/QIsNi/dk3HTzAymU6rVhGSi9v9OkogASRrSn6OMnFofa+WIwvnHJzHCZ8uY37NSERHv+FcT7CGoHHgU5+3hjEAWsXkX4TRDfrWvzsb/tkDaJbNv0KHo+WjcPHL/rBVIoexZpahaf4z4f1g6DfH6LOOgvwbjJZ3JEHNvE+DM5bY58Asn8MxOayYJ3hZ39J0hdepO+2+YUdkqPPxyJIvufXeoaGtsu0AYQ=='
         );
 
-        $response = $this->swedbank->handleResponse($responseData);
+        $response = $this->danske->handleResponse($responseData);
 
         $this->assertInstanceOf('Banklink\Response\Response', $response);
         $this->assertEquals(PaymentResponse::STATUS_SUCCESS, $response->getStatus());

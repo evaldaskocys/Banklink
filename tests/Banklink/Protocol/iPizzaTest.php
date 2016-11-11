@@ -3,6 +3,7 @@
 namespace Banklink\Protocol;
 
 use Banklink\Protocol\iPizza;
+use Banklink\Protocol\iPizza\ServicesStandard;
 use Banklink\Response\PaymentResponse;
 
 /**
@@ -16,6 +17,7 @@ class iPizzaTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->iPizza = new iPizza(
+            new ServicesStandard(),
             'uid258629',
             'Test Testov',
             '119933113300',
