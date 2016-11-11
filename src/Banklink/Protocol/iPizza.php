@@ -33,6 +33,8 @@ class iPizza implements ProtocolInterface
 
     protected $mbStrlen;
 
+    protected $bankCode;
+
     /**
      * initialize basic data that will be used for all issued service requests
      *
@@ -44,9 +46,10 @@ class iPizza implements ProtocolInterface
      * @param string  $publicKey     Public key (certificate) location
      * @param string  $endpointUrl
      * @param string  $version
+     * @param string  $bankCode      Bank code is required for some banks
      * @param boolean $mbStrlen      Use mb_strlen for string length calculation?
      */
-    public function __construct(Services $services, $sellerId, $sellerName, $sellerAccNum, $privateKey, $publicKey, $endpointUrl, $mbStrlen = false, $version = '008')
+    public function __construct(Services $services, $sellerId, $sellerName, $sellerAccNum, $privateKey, $publicKey, $endpointUrl, $mbStrlen = false, $bankCode = null, $version = '008')
     {
         $this->services            = $services;
 
@@ -59,6 +62,8 @@ class iPizza implements ProtocolInterface
         $this->privateKey          = $privateKey;
 
         $this->mbStrlen            = $mbStrlen;
+
+        $this->bankCode            = $bankCode;
 
         $this->protocolVersion     = $version;
     }
@@ -90,6 +95,10 @@ class iPizza implements ProtocolInterface
             Fields::CANCEL_URL       => $this->endpointUrl,
             Fields::USER_LANG        => $language
         );
+
+        if ($this->bankCode) {
+            $requestData[Fields::BANK_CODE] = $this->bankCode;
+        }
 
         $requestData = ProtocolUtils::convertValues($requestData, 'UTF-8', $outputEncoding);
 
