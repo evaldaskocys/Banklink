@@ -133,9 +133,10 @@ class iPizza implements ProtocolInterface
 
     /**
      * Prepare payment response instance
-     * Some data is only set if response is succesful
+     * Some data is only set if response is successful
      *
      * @param array $responseData
+     * @param bool $verificationSuccess
      *
      * @return \Banklink\Response\PaymentResponse
      */
@@ -157,7 +158,9 @@ class iPizza implements ProtocolInterface
             $response->setSenderName($responseData[Fields::SENDER_NAME]);
             $response->setSenderBankAccount($responseData[Fields::SENDER_BANK_ACC]);
             $response->setTransactionId($responseData[Fields::TRANSACTION_ID]);
-            $response->setTransactionDate(new \DateTime($responseData[Fields::TRANSACTION_DATE]));
+            preg_match("/^[0-9]{4}.(0[1-9]|1[0-2]).(0[1-9]|[1-2][0-9]|3[0-1])$/", $responseData[Fields::TRANSACTION_DATE]) ?
+                $response->setTransactionDate(\DateTime::createFromFormat('Y.m.d', $responseData[Fields::TRANSACTION_DATE])) :
+                $response->setTransactionDate(new \DateTime($responseData[Fields::TRANSACTION_DATE]));
         }
 
         return $response;
@@ -167,7 +170,6 @@ class iPizza implements ProtocolInterface
      * Generate request signature built with mandatory request data and private key
      *
      * @param array  $data
-     * @param string $encoding
      *
      * @return string
      */
