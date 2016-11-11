@@ -14,13 +14,13 @@ use Banklink\Protocol\iPizza;
  */
 class DanskeBank extends Banklink
 {
-    protected $requestUrl = 'https://www2.danskebank.ee/ibank/pizza/pizza';
+    protected $requestUrl = 'https://ebankas.danskebank.lt/ib/site/ibpay/login';
     protected $testRequestUrl = 'https://pangalink.net/banklink/sampo';
 
     /**
      * Force iPizza protocol
      *
-     * @param \Banklink\iPizza $protocol
+     * @param \Banklink\Protocol\iPizza $protocol
      * @param boolean          $testMode
      * @param string | null    $requestUrl
      */
