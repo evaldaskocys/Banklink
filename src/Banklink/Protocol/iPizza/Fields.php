@@ -32,6 +32,7 @@ final class Fields
     const SENDER_BANK_ACC          = 'VK_SND_ACC';
     const TRANSACTION_ID           = 'VK_T_NO';
     const TRANSACTION_DATE         = 'VK_T_DATE';
+    const TRANSACTION_DATETIME     = 'VK_DATETIME';
 
     // Callback URLs
     const SUCCESS_URL       = 'VK_RETURN';

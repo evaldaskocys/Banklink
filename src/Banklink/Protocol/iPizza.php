@@ -34,6 +34,7 @@ class iPizza implements ProtocolInterface
     protected $mbStrlen;
 
     protected $bankCode;
+    protected $dateTime;
 
     /**
      * initialize basic data that will be used for all issued service requests
@@ -47,9 +48,10 @@ class iPizza implements ProtocolInterface
      * @param string  $endpointUrl
      * @param string  $version
      * @param string  $bankCode      Bank code is required for some banks
+     * @param \DateTime $dateTime    DATETIME is required for some banks
      * @param boolean $mbStrlen      Use mb_strlen for string length calculation?
      */
-    public function __construct(Services $services, $sellerId, $sellerName, $sellerAccNum, $privateKey, $publicKey, $endpointUrl, $mbStrlen = false, $bankCode = null, $version = '008')
+    public function __construct(Services $services, $sellerId, $sellerName, $sellerAccNum, $privateKey, $publicKey, $endpointUrl, $mbStrlen = false, $bankCode = null, \DateTime $dateTime = null, $version = '008')
     {
         $this->services            = $services;
 
@@ -64,6 +66,7 @@ class iPizza implements ProtocolInterface
         $this->mbStrlen            = $mbStrlen;
 
         $this->bankCode            = $bankCode;
+        $this->dateTime            = $dateTime;
 
         $this->protocolVersion     = $version;
     }
@@ -80,6 +83,8 @@ class iPizza implements ProtocolInterface
      */
     public function preparePaymentRequestData($orderId, $sum, $message, $outputEncoding, $language = 'EST', $currency = 'EUR')
     {
+
+
         $requestData = array(
             Fields::SERVICE_ID       => $this->services->paymentRequest,
             Fields::PROTOCOL_VERSION => $this->protocolVersion,
@@ -96,10 +101,7 @@ class iPizza implements ProtocolInterface
             Fields::USER_LANG        => $language
         );
 
-        if ($this->bankCode) {
-            $requestData[Fields::BANK_CODE] = $this->bankCode;
-        }
-
+        $requestData = $this->addAdditionalFields($requestData);
         $requestData = ProtocolUtils::convertValues($requestData, 'UTF-8', $outputEncoding);
 
         $requestData[Fields::SIGNATURE] = $this->getRequestSignature($requestData);
@@ -129,6 +131,21 @@ class iPizza implements ProtocolInterface
         }
 
         throw new \InvalidArgumentException('Unsupported service with id: '.$service);
+    }
+
+    /**
+     * @param array $requestData
+     * @return array $requestData
+     */
+    protected function addAdditionalFields($requestData)
+    {
+        if ($this->bankCode) {
+            $requestData[Fields::BANK_CODE] = $this->bankCode;
+        }
+        if ($this->dateTime) {
+            $requestData[Fields::TRANSACTION_DATETIME] = $this->dateTime->format('Y-m-d\TH:i:sO');
+        }
+        return $requestData;
     }
 
     /**
