@@ -156,7 +156,6 @@ class Solo implements ProtocolInterface
      * @todo currently only supports payment signature generation
      *
      * @param array  $data
-     * @param string $encoding
      *
      * @return string
      *
@@ -171,11 +170,10 @@ class Solo implements ProtocolInterface
      * Verify that response data is correctly signed
      *
      * @param array  $responseData
-     * @param string $encoding Response data encoding
      *
      * @return boolean
      */
-    protected function verifyResponseSignature(array $responseData, $encoding)
+    protected function verifyResponseSignature(array $responseData)
     {
         if (!isset($responseData[Fields::SIGNATURE_RESPONSE])) {
             return false;
