@@ -26,10 +26,37 @@ class DanskeBankTest extends \PHPUnit_Framework_TestCase
             __DIR__.'/data/iPizza/private_key.pem',
             __DIR__.'/data/iPizza/public_key.pem',
             'http://www.google.com',
-            true
+            false,
+            '74000'
         );
 
         $this->danske = new DanskeBank($protocol);
+    }
+
+    public function testPreparePaymentRequest()
+    {
+        $expectedRequestData = array(
+            'VK_SERVICE'  => '1001',
+            'VK_VERSION'  => '008',
+            'VK_SND_ID'   => 'uid258629',
+            'VK_STAMP'    => '1',
+            'VK_AMOUNT'   => '100',
+            'VK_CURR'     => 'EUR',
+            'VK_ACC'      => '119933113300',
+            'VK_PANK'     => '74000',
+            'VK_NAME'     => 'Test Testov',
+            'VK_REF'      => '13',
+            'VK_MSG'      => 'Test payment',
+            'VK_RETURN'   => 'http://www.google.com',
+            'VK_CANCEL'   => 'http://www.google.com',
+            'VK_LANG'     => 'ENG',
+            'VK_MAC'      => 'Q8RbtD+kp0Om2IM3fAM5M3N6Z5jPpavSQmkjwohGOxoYn4Vp10al4IEhpPJieNMB2LDcn4qDdHqnYWZPPOBExuPAvMQ7aVrznsCGh/9W/D0KzBjfc74+VOxgeEcPhNv+XreKGWrq+3+iCDmly9spK7hYhKklyxpaSj/kfZ8raMjZFk3UibmY5m+0tkJgQT2WO8TMR0/rqz/ARcSZWX4L7Cb9EPDv+5XeEAupdSeOa5hOfJRqokbNosejTqG0zBFfwe/3B5UwzMIDnj91D6Hhyv7d0W8geOVH7fiwprkh5djiOSnlRx8f2NKEF5KXFsQDthg5bv0PLi3SrpHVXwGsCQ=='
+        );
+
+        $request = $this->danske->preparePaymentRequest(1, 100, 'Test payment', 'ENG', 'EUR');
+
+        $this->assertEquals($expectedRequestData, $request->getRequestData());
+        $this->assertEquals('https://ebankas.danskebank.lt/ib/site/ibpay/login', $request->getRequestUrl());
     }
 
     public function testHandlePaymentResponseSuccessWithSpecialCharacters()
