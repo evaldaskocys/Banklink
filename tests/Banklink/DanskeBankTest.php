@@ -4,7 +4,7 @@ namespace Banklink;
 
 use Banklink\DanskeBank;
 use Banklink\Protocol\iPizza;
-use Banklink\Protocol\iPizza\ServicesWithPANK;
+use Banklink\Protocol\iPizza\ServicesDanske;
 
 use Banklink\Response\PaymentResponse;
 
@@ -19,7 +19,7 @@ class DanskeBankTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $protocol = new iPizza(
-            new ServicesWithPANK(),
+            new ServicesDanske(),
             'uid258629',
             'Test Testov',
             '119933113300',
@@ -59,7 +59,7 @@ class DanskeBankTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('https://ebankas.danskebank.lt/ib/site/ibpay/login', $request->getRequestUrl());
     }
 
-    public function testHandlePaymentResponseSuccessWithSpecialCharacters()
+    public function testHandlePaymentResponseError()
     {
         $responseData = array(
             'VK_SERVICE'  => '1101',
@@ -85,6 +85,6 @@ class DanskeBankTest extends \PHPUnit_Framework_TestCase
         $response = $this->danske->handleResponse($responseData);
 
         $this->assertInstanceOf('Banklink\Response\Response', $response);
-        $this->assertEquals(PaymentResponse::STATUS_SUCCESS, $response->getStatus());
+        $this->assertEquals(PaymentResponse::STATUS_ERROR, $response->getStatus());
     }
 }
