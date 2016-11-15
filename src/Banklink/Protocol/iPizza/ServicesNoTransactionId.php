@@ -3,12 +3,12 @@
 namespace Banklink\Protocol\iPizza;
 
 /**
- * List of all services available via iPizza for Danske Bank
+ * List of all services available via iPizza for Siauliu Bankas and Danske Bank
  *
  * @author Evaldas Kocys <evaldas.kocys@gmail.com>
  * @since  11.11.2016
  */
-class ServicesDanske extends ServicesWithPANK
+class ServicesNoTransactionId extends ServicesWithPANK
 {
     /**
      * Fetch mandatory fields for a successful payment

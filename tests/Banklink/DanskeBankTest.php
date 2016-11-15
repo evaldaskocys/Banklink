@@ -4,7 +4,7 @@ namespace Banklink;
 
 use Banklink\DanskeBank;
 use Banklink\Protocol\iPizza;
-use Banklink\Protocol\iPizza\ServicesDanske;
+use Banklink\Protocol\iPizza\ServicesNoTransactionId;
 
 use Banklink\Response\PaymentResponse;
 
@@ -19,7 +19,7 @@ class DanskeBankTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $protocol = new iPizza(
-            new ServicesDanske(),
+            new ServicesNoTransactionId(),
             'uid258629',
             'Test Testov',
             '119933113300',
