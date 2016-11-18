@@ -11,11 +11,12 @@ namespace Banklink\Protocol;
 interface ProtocolInterface
 {
     /**
-     * @param type $orderId
-     * @param type $sum
-     * @param type $message
-     * @param type $language
-     * @param type $currency
+     * @param int $orderId
+     * @param float $sum
+     * @param string $message
+     * @param string $outputEncoding
+     * @param string $language
+     * @param string $currency
      *
      * @return array
      */
@@ -25,6 +26,7 @@ interface ProtocolInterface
      * Determine which response exactly by service id, if it's supported then call related internal method
      *
      * @param array $responseData
+     * @param string $inputEncoding
      *
      * @return \Banklink\Response\Response
      */
